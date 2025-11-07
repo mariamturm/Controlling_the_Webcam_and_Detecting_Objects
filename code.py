@@ -1,22 +1,49 @@
 import time
 import cv2
 
-video = cv2.VideoCapture(1)
+first_frame = None
+#frame_count = 0
 
-a = 0
+video = cv2.VideoCapture(1)
+time.sleep(0.07)
+
+#a = 0
 while True:
-    a = a+1
+    #a = a+1
     check, frame = video.read()
 
-    cv2.imshow("Capturing", frame)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    gray = cv2.GaussianBlur(gray,(21,21),0)
+
+
+    if first_frame is None:
+        first_frame = gray #first frame will be stored into gray and turned into grayscale
+        # frame_count += 1
+        continue #from second loop when first_frame is not none anymore this continue will make loop go from the top of the loop, it will not continue after if
+    
+    delta_frame = cv2.absdiff(first_frame,gray)
+
+    # thresh_frame = cv2.threshold(delta_frame, 30, 255, cv2.THRESH_BINARY)[1]
+    # thresh_frame = cv2.dilate(thresh_frame, None, iterations=2)
+    
+
+    cv2.imshow("Gray Frame", gray)
+    cv2.imshow("Delta Frame", delta_frame)
+
+
+    # frame_count += 1
+    # if frame_count % 30 == 0:
+    #     first_frame = gray
 
     key = cv2.waitKey(1)
-    
-    print(frame)
+    print(gray)
+    print(delta_frame)
 
     if key == ord('q'):
         break
+    
 
-print(f'Number of frames {a}')
+
+#print(f'Number of frames {a}')
 video.release()
 cv2.destroyAllWindows()
