@@ -23,12 +23,18 @@ while True:
     
     delta_frame = cv2.absdiff(first_frame,gray)
 
+    thresh_frame = cv2.threshold(delta_frame, 30, 255, cv2.THRESH_BINARY)[1]
+
+    thresh_frame = cv2.dilate(thresh_frame, None, iterations = 2)
+
+
     # thresh_frame = cv2.threshold(delta_frame, 30, 255, cv2.THRESH_BINARY)[1]
     # thresh_frame = cv2.dilate(thresh_frame, None, iterations=2)
     
 
     cv2.imshow("Gray Frame", gray)
     cv2.imshow("Delta Frame", delta_frame)
+    cv2.imshow("Threshhold Frame", thresh_frame)
 
 
     # frame_count += 1
